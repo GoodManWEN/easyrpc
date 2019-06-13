@@ -123,7 +123,13 @@ For flaxible use ,pickle can help us dealing with server's own data structure bu
 
 ```Python3
 from easyrpc import *
-import asyncio
+import asyncio ,os
 
-fun = lambda x:(即若 ， 全部用兵)
-ass = 
+c = rpc_client(port = 25000)
+
+func = lambda x ,y:(os.system('clear') ,print("This is a magic") , x**2 + y)
+assistant = c.magicwarp() # warp function to a magic assistant object
+ret = c.magiccall(assistant)(11 , 10)
+assert ret == [None , None , 131]
+```
+You will suprizingly relize that console of server.py has been changed.
