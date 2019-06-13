@@ -46,4 +46,84 @@ ret = c.test(1)
 print(ret) ; assert ret == 2
 ```
 # Useage
-ongoing
+Quick view about advanced features:
+- You can register both synchronize and asynchronize functions ,they will all behave asynchronizely as service.
+- You can use prefork method to improve handling capacity.
+- When register you can use `maximum_flow` to control overall flow capability of each function registered.
+```Python3
+# server.py
+from easyrpc import *
+
+s = rpc_server(port = 25000)
+
+@s.register()
+async def fib_async(n):
+    a , b = 0 , 1
+    for i in range(n):
+        a , b = b , a + b
+    return a
+
+@s.register(maximum_flow = 100)
+def fib_sync(n):
+    if n<2:
+        return n
+    return fib(n-1) + fib(n-2)
+
+s.prefork()
+asyncio.run(s.start_serving())
+```
+> Notification: since fork copy memory space as the same from parent to child process , where you fork matters . For example ,if you fork before register function ,then each function will have its own process lock. Fork *IS NOT* supported on windows.
+
+- Both synchronize and asynchronize method is offered by client ,use `sync` to control.
+```Python3
+# client_demo2.py
+from easyrpc import *
+import asyncio
+import time
+
+c = rpc_client(port = 25000)
+
+# This function blocks until answer returns back
+assert c.fib_async(1, sync = True) == None 
+
+async def main():
+    start_time = time.time()
+    tasks = (c.fib_async(i) for i in range(1000))
+    ret = await asyncio.gather(*tasks)   # you can make multiple \
+                                         # requests at the same time. 
+    print(f"Get {len(ret)} results ,for last three result  \
+          shows {ret[-3:]} ,takes time {time.time()-start_time}s.")
+asyncio.run(main())
+```
+- sync functions registered whill be running in process pool , since it takes a long communicating time(about 1ms) , make sure if you could get more time back when you call it. The following example shows that with this frame work you can take advantage of multi cores.
+```Python3
+# client_demo3.py
+from easyrpc import *
+from multiprocessing import cpu_count
+import asyncio , time
+
+c = rpc_client(port = 25000)
+
+async def main():
+    start_time_1 = time.time()
+    ret1 = await c.fib_sync(30)
+    end_time_1 = time.time()
+    ret2 = await asyncio.gather((c.fib_sync(30) for i in range(cpu_count())))
+    end_time_2 = time.time()
+    assert ret2 == [ret1] * cpu_count()
+    print(f"Single call takes time {end_time_1 - start_time}s while {cpu_count()} \
+          times call takes {end_time_2 - end_time_1}s")
+asyncio.run(main())
+```
+
+# Some more black magic.
+Pickle is a magic library python provides serialize service ,which is a stack describe language in essence. It maks it possible to share high level objects between process ,however it's low performance comparing to msgpack and not secure against erroneous maliciously constructed data.
+Pickle protocol is defaultly disabled in easyrpc.
+For flaxible use ,pickle can help us dealing with server's own data structure bu sending ape. 
+
+```Python3
+from easyrpc import *
+import asyncio
+
+fun = lambda x:(即若 ， 全部用兵)
+ass = 
