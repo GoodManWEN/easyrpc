@@ -11,6 +11,9 @@ class base_selector:
 
     def encode(self , message_type:int , request_token:int, *args) -> bytes:
 
+        if not isinstance(request_token , int):
+            raise TypeError("request_token type must be int")
+
         try:
             if message_type == 1:
                 data = self._serializer({
@@ -32,13 +35,15 @@ class base_selector:
                         "n" : request_token,
                         "err": args[0]
                     })
+            else:
+                raise SerializeError("message_type not supported")
 
             data_length = len(data)
 
             if data_length > 16777215:
                 raise OverflowError("Input message too long to serialze")
 
-            header = (chr(data_length // 65536) + chr(data_length // 256) + chr(data_length % 255) + chr(self._idf_code)).encode()
+            header = (chr(data_length // 65536) + chr((data_length % 65536)// 256) + chr(data_length % 256) + chr(self._idf_code)).encode('latin1')
             return header + data
         except Exception as err:
             raise SerializeError(err)
@@ -90,7 +95,7 @@ class msgpack_selector(base_selector):
             elif message_type == 3:
 
                 _ , request_token ,errrepr = message.values()
-                errrepr = errrepr.decode()
+                errrepr = errrepr.decode('utf-8')
                 return _ , request_token ,errrepr
             else:
                 # message type error
@@ -113,7 +118,7 @@ class pickle_selector(base_selector):
 
             if message_type == 1:
                 _ ,  request_token ,funcname ,args ,kwargs = message.values()
-                return request_token ,funcname ,args ,kwargs
+                return _ ,request_token ,funcname ,args ,kwargs
             elif message_type == 2:
                 _ , request_token, values = message.values()
                 return _ ,request_token ,values

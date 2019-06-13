@@ -3,6 +3,8 @@
 import asyncio
 import socket
 import os
+import sys
+import pickle
 from multiprocessing import RLock , Value, cpu_count
 from inspect import iscoroutinefunction
 from concurrent.futures import ProcessPoolExecutor as Pool
@@ -11,6 +13,7 @@ from .aside import autocheck ,timeouts
 from .selector import msgpack_selector , pickle_selector
 from .exceptions import *
 
+PY_37UP = sys.version_info >= (3, 7)
 REQUEST_TIMEOUT = 9999 # 92
 FOLLOWING_MESSAGE_TIMEOUT = 2
 VARIFY_WORD = '`$$'
@@ -20,7 +23,7 @@ SOCK_LISTEN_NUMBER = 100
 class rpc_base(object):
     """docstring for rpc_base"""
 
-    def create_socket(host:str , port:int , server:bool):
+    def create_socket(host:str , port:int , server:bool) -> socket.socket:
         sock = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
         sock.setsockopt(socket.SOL_SOCKET , socket.SO_REUSEADDR , 1)
         if server:
@@ -33,7 +36,7 @@ class rpc_base(object):
         super(rpc_base, self).__init__()
         self._selector = [msgpack_selector()]
     
-    async def protocoled_fetch(self , client):
+    async def protocoled_fetch(self , client:socket.socket) -> tuple:
 
         # return None means close connection
         # return False means broken package
@@ -71,17 +74,21 @@ class rpc_server(rpc_base):
     '''
     main problem in building a python rpc is in consideration of performance tradeof  ,it's diffcult for us to maintain some high level data structures and inplementing some complex control algrisms with magical functions.
     '''
+    async def _recv_magiccall(magic_code):
+        return pickle.loads(magic_code[0])
+
 
     @autocheck
     def __init__(   self , 
                     host:str = '' ,
                     port:int = 0 ,
-                    allow_pickle:bool = False
+                    allow_pickle:bool = True,
+                    unstable_network:bool = False
                 ):
         super(rpc_server, self).__init__()
 
         self._server_sock = self.__class__.create_socket(host , port ,True)
-        self._unstable_network = True
+        self._unstable_network = unstable_network
         self._request_buffer = {}
         self._pool_lock = RLock()
         self._flow_counting = {}
@@ -91,6 +98,7 @@ class rpc_server(rpc_base):
         self._allow_pickle = allow_pickle
         if allow_pickle:
             self._selector.append(pickle_selector()) # pickle_selector
+            self._func_infos['magiccall'] = self.__class__._recv_magiccall, False ,0 ,0
 
     @autocheck
     def prefork(self , max_workers:int = None ,bindcore:bool = False):
@@ -172,7 +180,7 @@ class rpc_server(rpc_base):
 
         return decorator
 
-    async def _buffer_time_out(self , request_token):
+    async def _buffer_time_out(self , request_token) -> None:
         for i in range(3):
             await asyncio.sleep(BUFFER_TIMEOUT_SECONDS)
             if self._request_buffer[request_token] != VARIFY_WORD:
@@ -180,7 +188,7 @@ class rpc_server(rpc_base):
         else:
             del self._request_buffer[request_token]
 
-    async def _handler_server_sendback(self, client ,data:bytes ,protocol:int):
+    async def _handler_server_sendback(self, client:socket.socket ,data:bytes ,protocol:int):
 
         # exception was catched inside decoder , returns 0 when error occured.
         type_code ,*args = self._selector[protocol].decode(data)
@@ -278,14 +286,24 @@ class rpc_server(rpc_base):
                 self._loop.create_task(self._handler_server_sendback(client, data ,protocol))
 
 
-    async def start_serving(self , loop = None):
+    async def start_serving(self , loop = None , testing = False):
         if loop is None:
             self._loop = asyncio.get_running_loop()
         else:
             self._loop = loop
 
         self._default_pool = Pool(max_workers=cpu_count())
-        print(f"Start serving at {self._server_sock.getsockname()}")
+        
+        if self._isparent or self._isparent is None:
+
+            if testing:
+                sys.stderr.write("Start test.\n")
+                sys.stderr.flush()
+            else:
+                print(f"Start serving at {self._server_sock.getsockname()}\n")
         while True:
             client , addr = await self._loop.sock_accept(self._server_sock)
             self._loop.create_task(self._handler_message_comin( client))
+
+if sys.version_info < (3, 6):
+    raise PyVersionError("This module could only run on python 3.6 or above ,which has advanced asyncio apis.")
