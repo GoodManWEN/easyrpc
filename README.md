@@ -142,9 +142,11 @@ You will suprizingly relize that console of server.py has been changed.
 >    CPU : Ryzen 1700x<br>
 >    network interface : Intel(R) Dual Band Wireless-AC 3165<br>
 >    VM 0kb local loopback<br>
+
 ![](https://github.com/NCNU-OpenSource/testrepo/blob/master/benchmarks.png?raw=true)
 
 - Latency<br>
+
 |-----|pypy3|uvloop|cpython
 server|------|------|------|
 client|cont1|cont2|cont3|
