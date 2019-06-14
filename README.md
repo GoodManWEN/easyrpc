@@ -34,7 +34,7 @@
  loop.run_until_complete(s.start_serving(loop))
  ```
  
-Then you may create a client file like this:
+Then you may create a client file like this:<br>
 which allows you to call whatever function you have registered in your server.
 ```Python3
 # client.py
@@ -45,7 +45,7 @@ c = rpc_client(port = 25000)
 ret = c.test(1)
 print(ret) ; assert ret == 2
 ```
-# Useage
+# Usage
 Quick view about advanced features:
 - You can register both synchronize and asynchronize functions ,they will all behave asynchronizely as service.
 - You can use prefork method to improve handling capacity.
