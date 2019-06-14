@@ -8,10 +8,17 @@
  - Distributed notice service supported by etcd.(Developing.
  - Some more black magics.
  
+ # Install
+ 
+ ```
+ pip install git+https://github.com/NCNU-OpenSource/testrepo.git
+ ```
+ > Notification : currently setup.py under construction ,this command will not work. simply import from a same folder.
+ 
  
  # Get started
  
- > Notification : since distributed support is still under developing , only easy mode is allowed in current version.
+ > Notification : since distributed support is still under development , only easy mode is allowed in current version.
  
  To get started , you may create a rpc server like this
  ```Python3
