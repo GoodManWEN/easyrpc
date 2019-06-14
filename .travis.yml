@@ -1,0 +1,17 @@
+language: python
+sudo: enabled
+dist: xenial
+python:
+    - "3.6"
+    - "3.7"
+env:
+    global:
+     - TRAVIS=true
+install:
+    - "pip install ."
+before_install:
+    - "pip install pytest"
+    - "pip install pytest-asyncio"
+    - "pip install pytest-xprocess"
+script:
+    - "pytest"
