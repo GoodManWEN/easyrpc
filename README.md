@@ -116,7 +116,7 @@ async def main():
 asyncio.run(main())
 ```
 
-# Some more black magic.
+# Some more magic.
 Pickle is a magic library python provides serialize service ,which is a stack describe language in essence. It maks it possible to share high level objects between process ,however it's low performance comparing to msgpack and not secure against erroneous maliciously constructed data.
 Pickle protocol is defaultly disabled in easyrpc.
 For flaxible use ,pickle can help us dealing with server's own data structure bu sending ape. 
@@ -127,9 +127,24 @@ import asyncio ,os
 
 c = rpc_client(port = 25000)
 
-func = lambda x ,y:(os.system('clear') ,print("This is a magic") , x**2 + y)
+func = lambda x ,y:(os.system('clear') ,print("This is a magic!") , x**2 + y)
 assistant = c.magicwarp() # warp function to a magic assistant object
-ret = c.magiccall(assistant)(11 , 10)
+ret = c.magiccall(assistant)(11 , 10) # with help of assistant ,magic call returns a callable.
 assert ret == [None , None , 131]
 ```
 You will suprizingly relize that console of server.py has been changed.
+
+# Performace
+
+- RPS on different platform.
+> Testing platform: <br>
+>    CPU : Ryzen 1700x<br>
+>    network interface : Intel(R) Dual Band Wireless-AC 3165<br>
+>    VM 0kb local loopback<br>
+![](https://github.com/NCNU-OpenSource/testrepo/blob/master/benchmarks.png?raw=true)
+
+- Latency<br>
+|-----|pypy3|uvloop|cpython
+server|------|------|------|
+client|cont1|cont2|cont3|
+> seems like markdown tables not work here
