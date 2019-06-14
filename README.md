@@ -10,12 +10,10 @@
  
  # Installation
  
- ```
- pip install git+https://github.com/NCNU-OpenSource/testrepo.git
- ```
- > Notification : currently setup.py under construction ,this command will not work. simply import from a same folder.
- 
- 
+
+`pip install git+https://github.com/NCNU-OpenSource/testrepo.git`
+
+
  # Get started
  
  > Notification : since distributed support is still under development , only easy mode (no support from etcd) is allowed in current version.
