@@ -57,6 +57,7 @@ Quick view about advanced features:
 - You can register both synchronize and asynchronize functions ,they will all behave asynchronizely as service.
 - You can use prefork method to improve handling capacity.
 - When register you can use `maximum_flow:int` to control overall flow capability of each function registered.
+- `unstable_network:bool` helps you control if your server need to maintain a datastructure preventing repeated execute cause by network fluctuation , or just resend call when request failed , Which may reduce performance.
 ```Python3
 # server.py
 from easyrpc import *
@@ -80,6 +81,7 @@ s.prefork(bindcore = False)
 asyncio.run(s.start_serving())
 ```
 `bindcore:bool` binds each process to a cpu core specifily which helps reduce cache miss ,but limits the flexibility of kernel's tasks scheduling .Default False.
+
 > Notification: since fork copy memory space as the same from parent to child process , where you fork matters . For example ,if you fork before register function ,then each function will have its own process lock. Fork *IS NOT* supported on windows.
 
 - Both synchronize and asynchronize method is offered by client ,use `sync:bool` to control.
