@@ -18,7 +18,7 @@
  
  # Get started
  
- > Notification : since distributed support is still under development , only easy mode is allowed in current version.
+ > Notification : since distributed support is still under development , only easy mode (no support from etcd) is allowed in current version.
  
  To get started , you may create a rpc server like this
  ```Python3
