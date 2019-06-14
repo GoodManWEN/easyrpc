@@ -8,7 +8,7 @@
  - Distributed notice service supported by etcd.(Developing.
  - Some more black magics.
  
- # Install
+ # Installation
  
  ```
  pip install git+https://github.com/NCNU-OpenSource/testrepo.git
