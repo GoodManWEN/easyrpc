@@ -11,7 +11,9 @@
  # Installation
  
 
-`pip install git+https://github.com/NCNU-OpenSource/testrepo.git`
+```
+pip install git+https://github.com/NCNU-OpenSource/testrepo.git
+```
 
 
  # Get started
