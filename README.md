@@ -5,6 +5,7 @@
  - Both synchronize and asynchronize is allowed register to server.
  - Both synchronize and asynchronize call method is provided by the client.
  - High performance & low latency with async preforked module.
+ - Supported for both pypy and cpython 36up version on Linux and windows.
  - Distributed notice service supported by etcd.(Developing.
  - Some more black magics.
  
