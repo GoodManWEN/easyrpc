@@ -12,7 +12,7 @@
  
 
 ```
-pip install git+https://github.com/NCNU-OpenSource/testrepo.git
+pip3 install git+https://github.com/NCNU-OpenSource/testrepo.git
 ```
 > Currently continuous integration not activated , reliability might be limited.
 
