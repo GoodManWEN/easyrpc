@@ -68,9 +68,6 @@ class rpc_client(rpc_base):
                                                 ]
                                             ]
 
-            # 建立一个数据结构，第一次选中的时候连接
-            # 如果True:继续，否则如果None,创建连接，否则如果False，pop到栈尾
-
     def _sync_call(self , funcname:str , args:tuple , kwargs:dict):
 
         sock = self.__class__.create_socket('',0,False)
