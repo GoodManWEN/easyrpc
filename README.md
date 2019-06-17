@@ -58,7 +58,7 @@ Quick view about advanced features:
 - You can register both synchronize and asynchronize functions ,they will all behave asynchronizely as service.
 - You can use prefork method to improve handling capacity.
 - When register you can use `maximum_flow:int` to control overall flow capability of each function registered.
-- `unstable_network:bool` helps you control if your server need to maintain a datastructure preventing repeated execute cause by network fluctuation , or just resend call when request failed , Which may reduce performance.
+- `unstable_network:bool` helps you control if your server need to maintain a datastructure preventing repeated execute cause by network fluctuation ,  which may reduce performanceor , just resend call when request failed.
 ```Python3
 # server.py
 from easyrpc import *
