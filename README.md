@@ -5,8 +5,8 @@
  - Both synchronize and asynchronize is allowed register to server.
  - Both synchronize and asynchronize call method is provided by the client.
  - High performance & low latency with async preforked module.
- - Supported for both pypy and cpython 36up version on Linux and windows.
- - Distributed notice service supported by etcd.(Developing.
+ - Supported for both pypy and cpython 36up version on Linux and Windows platform.
+ - Distributed notice service supported by etcd.(Under development.
  - Some more black magics.
  
  # Installation
@@ -15,7 +15,7 @@
 ```
 pip3 install git+https://github.com/NCNU-OpenSource/testrepo.git
 ```
-> Currently continuous integration not activated , reliability might be limited.
+> Notification : Currently continuous integration not activated , reliability might be limited.
 
  # Get started
  
@@ -33,7 +33,7 @@ pip3 install git+https://github.com/NCNU-OpenSource/testrepo.git
  def test(n):
      return n+1
  
- # standard startover with asyncio api , easy to control
+ # standard startover with standard asyncio api , easy to control
  asyncio.run(s.start_serving())
  ```
  \* if you're using pypy or python version 3.6 ,you may need to pass eventloop explicitly like this:
