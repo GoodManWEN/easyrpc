@@ -218,3 +218,7 @@ Create a client.
 | --------| -------- | -------- | --------|
 | Server|0.110ms| 0.142ms| 0.155ms|
 | Client |0.390ms|0.422ms|0.460ms|
+
+- Latency Comparison<br>
+|easyrpc| grpc | 
+| 0.420ms| 3.766ms| 
