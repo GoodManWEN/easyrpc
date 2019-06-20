@@ -214,7 +214,7 @@ Create a client.
 
 - Latency<br>
 
-|-----|pypy3|uvloop|cpython
-server|------|------|------|
-client|cont1|cont2|cont3|
-> seems like markdown tables not work here
+|class |pypy3| uvloop | cpython
+| --------| -------- | -------- | --------|
+| Server|0.110ms| 0.142ms| 0.155ms|
+| Client |0.390ms|0.422ms|0.460ms|
