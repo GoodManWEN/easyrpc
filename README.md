@@ -145,7 +145,7 @@ assert ret == [None , None , 131]
 ```
 You will suprizingly relize that console of server.py has been changed.
 
-# Data API Reference
+# API Reference
 Documentation of exposed interfaces
 #### Class : rpc_server(\[host:str , port:int , allow_pickle:bool , unstable_network:bool\])
 Create a rpc server.
