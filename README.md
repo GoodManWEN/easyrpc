@@ -148,57 +148,57 @@ You will suprizingly relize that console of server.py has been changed.
 # Data API Reference
 Documentation of exposed interfaces
 > Class : rpc_server(\[host:str , port:int , allow_pickle:bool , unstable_network:bool\])
-#### Create a rpc server.
-#### Parameters:
+###### Create a rpc server.
+###### Parameters:
 - host ,port : Location to bind server.
 - allow_pickle : Allow magic call or user level pickle protocol ,in consideration of security you should only allow this option in a reliable environment. Default True.
 - unstable_network : If turned on , server will maintain a data structure which avoids rehandling request ,will cause performance loss. Default False.
 
 > method : register(\[name:str , timeout:int , maximum_flow:int\])
-#### Register a function, need to be used as quadratic decorator.
-#### Parameters:
+##### Register a function, need to be used as quadratic decorator.
+##### Parameters:
 - name : What name you declare this service.
 - timeout : Time to close a connection from a clinet if no heartbeat .Default 60
 - maximum_overflow : If > 0 , new request will be rejected if currently running example number larger than overflow ,this is a fuse to protect server for cpu bound tasks. Disabled if == 0. Default disabled.
 
 > method : Prefork(\[max_workers:int , bindcore:bool\])
-#### Use multiple cores. Not supported on windows.
-#### Parameters:
+##### Use multiple cores. Not supported on windows.
+##### Parameters:
 - max_workers : How many process you fork. Default the same number as your cpu core nums.
 - bindcore : bindcore binds each process to a cpu core specifily which helps reduce cache miss ,but limits the flexibility of kernel's tasks scheduling. Default False.
 
-> method : start_serving(\[Loop:asyncio.EventLoop\])
-#### Start serving. Use standard asyncio apis to start.
-#### Parameters:
+> ##### method : start_serving(\[Loop:asyncio.EventLoop\])
+##### Start serving. Use standard asyncio apis to start.
+##### Parameters:
 - Loop : Since python36 has no ability to get current running loop , use this pass eventloop explicitly.
 
 > Class : rpc_client(\[host:int , port:int\])
-#### Create a client.
+##### Create a client.
 
 > method : set_event_loop(loop:asyncio.EventLoop)
-#### Parameters:
+##### Parameters:
 - Loop : Will be used in async mode in python36, use this set eventloop before async call.
 
 > method : async_call(name:str , \*args , \*\*kwargs)
-#### Explicit way to make a async call ,which gives you a slightly better performance. 
-#### Parameters:
+##### Explicit way to make a async call ,which gives you a slightly better performance. 
+##### Parameters:
 - name : Function name string.
 - \*args , \*\*kwargs : Functions arguments.
 
 > method : sync_call(name:str , \*args , \*\*kwargs)
-#### Explicit way to make a sync call ,which gives you a slightly better performance. 
+##### Explicit way to make a sync call ,which gives you a slightly better performance. 
 
 > method : magicwarp(func : Callable) -> MagicAssistant
-#### Wrap a function pointer into a magic assistant data structure ,which flatten your stack.
+##### Wrap a function pointer into a magic assistant data structure ,which flatten your stack.
 
 > method : magiccall(assistant:MagicianAssistant) -> Callable
-#### Make a magic call with help of assistant ,you should use it like this : c.magiccall(assistant)(\*args , \*\*kwargs)
+##### Make a magic call with help of assistant ,you should use it like this : c.magiccall(assistant)(\*args , \*\*kwargs)
 
 > Class : msgpack_selector():
-#### Provide support for msgpack protocol serialization.
+##### Provide support for msgpack protocol serialization.
 
 > Class : pickle_selector():
-#### Provide support for pickle protocol serialization.
+##### Provide support for pickle protocol serialization.
 
 
 # Performace
