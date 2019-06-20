@@ -195,12 +195,11 @@ Create a client.
     Make a magic call with help of assistant ,you should use it like this : c.magiccall(assistant)(\*args , \*\*kwargs)
 
 #### Class : base_selector():
-* \.
-    #### Class : msgpack_selector():
-    Provide support for msgpack protocol serialization.
+#### &emsp;&emsp; Class : msgpack_selector():
+&emsp;&emsp;Provide support for msgpack protocol serialization.
 
-    #### Class : pickle_selector():
-    Provide support for pickle protocol serialization.
+#### &emsp;&emsp; Class : pickle_selector():
+&emsp;&emsp;Provide support for pickle protocol serialization.
 
 
 # Performace
